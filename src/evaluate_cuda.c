@@ -24,15 +24,15 @@ conjugrad_float_t evaluate_cuda (
 	void *instance,
 	const conjugrad_float_t *d_x_padded,
 	conjugrad_float_t *d_g_padded,
-	const int new_nvar
+	const size_t new_nvar
 ) {
 
 	userdata *ud = (userdata *)instance;
-	const int ncol = ud->ncol;
-	const int nrow = ud->nrow;
-	const int nsingle = ud->nsingle;
-	int nsingle_padded = nsingle + N_ALPHA_PAD - (nsingle % N_ALPHA_PAD);
-	const int nvar = nsingle + ncol * ncol * N_ALPHA * N_ALPHA;
+	const unsigned long ncol = ud->ncol;
+	const unsigned long nrow = ud->nrow;
+	const unsigned long nsingle = ud->nsingle;
+    unsigned long nsingle_padded = nsingle + N_ALPHA_PAD - (nsingle % N_ALPHA_PAD);
+	const unsigned long nvar = nsingle + ncol * ncol * N_ALPHA * N_ALPHA;
 
 	const conjugrad_float_t *d_x1_padded = d_x_padded;
 	const conjugrad_float_t *d_x2_padded = &d_x_padded[nsingle_padded];
@@ -79,9 +79,10 @@ int init_cuda( void *instance ) {
 	userdata *ud = (userdata *)instance;
 	int ncol = ud->ncol;
 	int nrow = ud->nrow;
-	int nsingle = ud->nsingle;
-	int nvar = ud->nvar;
-	int new_nvar = nsingle + N_ALPHA_PAD - (nsingle % N_ALPHA_PAD) + ncol * ncol * N_ALPHA * N_ALPHA_PAD;
+    unsigned long nsingle = ud->nsingle;
+	unsigned long nvar = ud->nvar;
+    unsigned long new_nvar = nsingle + N_ALPHA_PAD - (nsingle % N_ALPHA_PAD) +
+            ((unsigned long) ncol) * ((unsigned long) ncol) * N_ALPHA * N_ALPHA_PAD;
 
 	unsigned char *msa = ud->msa;
 	

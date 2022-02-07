@@ -89,11 +89,11 @@ static int progress(
  */
 void init_bias(conjugrad_float_t *x, userdata *ud) {
 
-	int ncol = ud->ncol;
-	int nrow = ud->nrow;
-	int nsingle = ncol * (N_ALPHA - 1);
-	int nsingle_padded = nsingle + N_ALPHA_PAD - (nsingle % N_ALPHA_PAD);
-	int nvar_padded = nsingle_padded + ncol * ncol * N_ALPHA * N_ALPHA_PAD;
+	size_t ncol = ud->ncol;
+    size_t nrow = ud->nrow;
+    size_t nsingle = ncol * (N_ALPHA - 1);
+    size_t nsingle_padded = nsingle + N_ALPHA_PAD - (nsingle % N_ALPHA_PAD);
+    size_t nvar_padded = nsingle_padded + ncol * ncol * N_ALPHA * N_ALPHA_PAD;
 
 	conjugrad_float_t *x1 = x;
 
@@ -384,10 +384,10 @@ int main(int argc, char **argv)
 	unsigned char* msa = read_msa(msafile, &ncol, &nrow);
 	fclose(msafile);
 
-	int nsingle = ncol * (N_ALPHA - 1);
-	int nvar = nsingle + ncol * ncol * N_ALPHA * N_ALPHA;
-	int nsingle_padded = nsingle + N_ALPHA_PAD - (nsingle % N_ALPHA_PAD);
-	int nvar_padded = nsingle_padded + ncol * ncol * N_ALPHA * N_ALPHA_PAD;
+	size_t nsingle = ncol * (N_ALPHA - 1);
+    size_t nvar = nsingle + ((size_t) ncol) * ((size_t) ncol) * N_ALPHA * N_ALPHA;
+    size_t nsingle_padded = nsingle + N_ALPHA_PAD - (nsingle % N_ALPHA_PAD);
+    size_t nvar_padded = nsingle_padded + ((size_t) ncol) * ((size_t) ncol) * N_ALPHA * N_ALPHA_PAD;
 
 #ifdef CURSES
 	bool color = detect_colors();
@@ -436,7 +436,8 @@ int main(int argc, char **argv)
 		                    sizeof(conjugrad_float_t) * nrow * ncol * 2 + // PC, PCS
 		                    sizeof(conjugrad_float_t) * nrow * ncol * N_ALPHA_PAD + // PCN
 		                    sizeof(conjugrad_float_t) * nrow + // Weights
-		                    (sizeof(conjugrad_float_t) * ((N_ALPHA - 1) * ncol + ncol * ncol * N_ALPHA * N_ALPHA_PAD)) * 4;
+		                    (sizeof(conjugrad_float_t) * ((N_ALPHA - 1) * ncol +
+                                ((size_t) ncol) * ((size_t) ncol) * N_ALPHA * N_ALPHA_PAD)) * 4;
 
 		setlocale(LC_NUMERIC, "");
 		printf("Total GPU RAM:  %'17lu\n", mem_total);
@@ -490,6 +491,7 @@ int main(int argc, char **argv)
 	printf("\n");
 #endif // CUDA
 
+    printf("Allocating %.2f Gb\n", ((double)nvar_padded) / (1<<30) * sizeof(conjugrad_float_t));
 	conjugrad_float_t *x = conjugrad_malloc(nvar_padded);
 	if( x == NULL) {
 		die("ERROR: Not enough memory to allocate variables!");

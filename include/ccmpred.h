@@ -62,7 +62,7 @@ typedef struct userdata {
 	/**
 	 * The number of variables
 	 */
-	int nvar;
+	unsigned long nvar;
 
 	/**
 	 * Extra data for the actual evaluate implementation

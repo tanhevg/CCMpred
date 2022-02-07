@@ -17,7 +17,7 @@ conjugrad_float_t evaluate_cpu(
 	void *instance,
 	const conjugrad_float_t *x,
 	conjugrad_float_t *g,
-	const int nvar_padded
+	const size_t nvar_padded
 ) {
 
 	userdata *ud = (userdata *)instance;
@@ -155,7 +155,7 @@ conjugrad_float_t evaluate_cpu(
 		g[v] += F2 * lambda_single * x[v]; // F2 is 2.0
 	}
 
-	for(int v = nsingle_padded; v < nvar_padded; v++) {
+	for(size_t v = nsingle_padded; v < nvar_padded; v++) {
 		reg += F05 * lambda_pair * x[v] * x[v]; // F05 is 0.5
 		g[v] += F2 * lambda_pair * x[v]; // F2 is 2.0
 	}
@@ -172,7 +172,7 @@ int init_cpu(void* instance) {
 	extra_userdata *udx = (extra_userdata *)malloc(sizeof(extra_userdata));
 	ud->extra = udx;
 
-	int ncol = ud->ncol;
+	size_t ncol = ud->ncol;
 	udx->g2 = conjugrad_malloc(ncol * ncol * N_ALPHA * N_ALPHA_PAD);
 	if(udx->g2 == NULL) {
 		die("ERROR: Not enough memory to allocate temp g2 matrix!");

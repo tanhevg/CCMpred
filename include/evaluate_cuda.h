@@ -9,7 +9,7 @@ conjugrad_float_t evaluate_cuda (
 	void *instance,
 	const conjugrad_float_t *x,
 	conjugrad_float_t *g,
-	const int nvar
+	const size_t nvar
 );
 
 

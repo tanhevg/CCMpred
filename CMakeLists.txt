@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.8)
 include(CheckLanguage)
 
 project (CCMpred)
+set(WITH_JANSSON OFF)
 set(CCMPRED_MAJOR_VERSION 0)
 set(CCMPRED_MINOR_VERSION 3)
 set(CCMPRED_PATCH_VERSION 3)
