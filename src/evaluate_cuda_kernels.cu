@@ -1,6 +1,6 @@
 #include "evaluate_cuda_kernels.h"
 #include "conjugrad.h"
-#include <math_functions.h> // CUDA math functions, used for log/__logf and exp/__expf
+#include <cuda_runtime_api.h> // CUDA math functions, used for log/__logf and exp/__expf
 
 #define TILE_DIM 32
 
